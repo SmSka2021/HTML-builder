@@ -1,54 +1,48 @@
 const fs = require('fs');
 const path = require('path');
 
+let adress = path.resolve(__dirname, 'files-copy'); 
+let src = path.join(__dirname, 'files');
 
-function copyDir(){
-  let adress = path.resolve(__dirname, 'files-copy'); 
 
+function copyDir_and_clean(adress){
   fs.access(adress, fs.constants.F_OK, (err) => {
     if (err) {
-      copyRecursive();
+      copyRecursive(src, adress);
     } else {
-      fs.readdir(adress, {withFileTypes: true}, (err, files) => {
-        files.forEach(function(result) {  
-          if(result.isFile()){
-            let name = result.name;         
-            let dests = path.join(__dirname, 'files-copy', name);   
-            fs.unlink(dests, (err) => {
-              if (err) throw err;           
-            });
-          }});
+      fs.rm(adress, { recursive: true }, (err) => {
+        if (err) {
+          throw err; }
       });
-      setTimeout(()=> {fs.rmdir(adress, (err) => {
-        if (err) throw 'not Удалили папку';             
-      });}, 100 );
-      setTimeout(()=> {copyRecursive();}, 300 ); 
+      setTimeout(()=> {copyRecursive(src, adress);}, 200 ); 
     }});       
 } 
+copyDir_and_clean(adress); 
 
-copyDir(); 
 
-let src = path.join(__dirname, 'files');
-let dest = path.join(__dirname, 'files-copy');
 
-function copyRecursive() {
-  
+function copyRecursive(src, dest) {  
   fs.mkdir(dest, { recursive: true }, (err) => {
     if (err) throw err;  
-    console.log('Создана новая папка files-copy');
+    console.log('Создана новая папка');
   });
   fs.readdir(src, {withFileTypes: true}, (err, files) => {
     if (err) throw err;    
-    files.forEach(function(result) {  
-      if(result.isFile()){
-        let name = result.name;
-        let srcs = path.join(__dirname, 'files', name);
-        let dests = path.join(__dirname, 'files-copy', name);            
+    files.forEach(function(result) { 
+      let name = result.name;
+      let srcs = path.join(src, name);
+      let dests = path.join(dest, name);    
+      if(result.isFile()){                 
         fs.copyFile(srcs, dests, (err) => {
           if (err) throw err;  
-          console.log('Файл успешно копирован');
+          console.log('Файл успешно скопирован');
         });
-      }});  
+      }
+      if(result.isDirectory()){
+        copyRecursive(srcs, dests);
+      }  
+    });  
   });   
   
 }
+module.export=copyDir_and_clean;
