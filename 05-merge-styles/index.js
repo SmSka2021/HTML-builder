@@ -50,4 +50,3 @@ const  createBundCss=(src, pathBundleFile)=>{
     }); 
   });
 };
-exports.createBundCss = createBundCss;//для использования в задании № 6

@@ -1,7 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const copyDir = require('../04-copy-directory/index'); //это мой модуль из задания №4
-const createBundCss = require('../05-merge-styles/index');//это мой модуль из задания №5
 
 let pathDist = path.resolve(__dirname, 'project-dist'); 
 let srcAssets = path.resolve(__dirname, 'assets');
@@ -15,14 +13,13 @@ let pathDistHTML = path.resolve(pathDist, 'index.html');
 
 function createFolderDist_and_Delete(){
   fs.access(pathDist, fs.constants.F_OK, (err) => {
+    fs.rm(pathDist, { recursive: true }, (err) => {
+      if (err) throw err; 
+    });
+    setTimeout(()=> {createDist();}, 500 );   
     if (err) {
-      createDist();
-    } else{
-      fs.rm(pathDist, { recursive: true }, (err) => {
-        if (err) throw err; 
-      });
-      setTimeout(()=> {createDist();}, 500 );   
-    }
+      setTimeout(()=> {createDist();}, 500 );
+    } 
   });
 }
 createFolderDist_and_Delete();
@@ -33,9 +30,9 @@ const createDist = ()=>{
     console.log('Создана новая папка project-dist');
     fs.mkdir(pathDistAssets, { recursive: true }, (err) => {
       if (err) throw err;             
-      copyDir.copyRecursive(srcAssets, pathDistAssets);
+      copyRecursive(srcAssets, pathDistAssets);
       console.log('Скопирована папка assets');
-      createBundCss.createBundCss(srcStyles, pathBundleFileCss);
+      createBundCss(srcStyles, pathBundleFileCss);
     });
   });
   readHtmlFile();
@@ -96,28 +93,54 @@ const readerComponentFolder =()=>{//получаем patch HTML файлов
   }
 };
 
-
-
-/*const readerComponentFolder =()=>{//получаем patch HTML файлов
-  fs.open(pathDistHTML, 'a+', (err, fd) => {
-    if (err) throw err;
-    //fd - это дескриптор файла
-    console.log(fd)
-})
-  let TextHTML_file= strTemplate_HTML.slice(0, arrIndx_chunk[0][0]);//строка из HTML файлов
-  for(let i =0; i<arrTags.length; i++){
-    let pathHtmlFile = path.resolve(componentsFolder, arrTags[i]+'.html');//patch HTML файлов
-    let strHTML_file = '';
-    const stream = fs.createReadStream(pathHtmlFile, 'utf-8');  
-    stream.on('data', chunk => strHTML_file += chunk);
-    stream.on('end', () => {
-      if(arrIndx_chunk[i+1]){
-        TextHTML_file += strHTML_file + strTemplate_HTML.slice(arrIndx_chunk[i][3]+1, arrIndx_chunk[i+1][0]);
-      } else if(strTemplate_HTML.length-1 > (arrIndx_chunk[i][3]+1)){
-        TextHTML_file += strHTML_file + strTemplate_HTML.slice(arrIndx_chunk[i][3]+1);
+const copyRecursive =(src, dest)=> {  
+  fs.mkdir(dest, { recursive: true }, (err) => {
+    if (err) throw err;  
+    console.log('Создана новая папка');
+  });
+  fs.readdir(src, {withFileTypes: true}, (err, files) => {
+    if (err) throw err;    
+    files.forEach(function(result) { 
+      let name = result.name;
+      let srcs = path.join(src, name);
+      let dests = path.join(dest, name);    
+      if(result.isFile()){                 
+        fs.copyFile(srcs, dests, (err) => {
+          if (err) throw err;  
+        });
       }
-      console.log(TextHTML_file); 
-    });
-    
-  }
-}*/
+      if(result.isDirectory()){
+        copyRecursive(srcs, dests);
+      }  
+    });  
+  });   
+  
+};
+const  createBundCss=(src, pathBundleFile)=>{
+  let pathFileCss =[];
+  //читаем папку styles и создаём массив pathFileCss с адресами css файлов//
+  fs.readdir(src,{withFileTypes: true}, (err, files) => {
+    if(err) throw err; 
+    files.forEach(function(result) {  
+      if(result.isFile()){
+        let name = result.name;         
+        let pathFile = path.join(src, name);
+        let typeFile = path.extname(pathFile);
+        if(typeFile ==='.css'){
+          pathFileCss.push(pathFile);//массив с адресами Сss файлов
+          fs.readFile(pathFile, 'utf8', (err, data) => {
+            if(err) throw err;
+            fs.open(pathBundleFile, 'a+', (err) => {
+              if(err) throw err;           
+              fs.appendFile(pathBundleFile, data, (err) => {
+                if(err) throw err;
+                console.log('Данные из файла css добавлены!');
+              });
+            });         
+          });
+        }
+      }
+    }); 
+  });
+};
+

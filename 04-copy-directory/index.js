@@ -8,7 +8,7 @@ let src = path.join(__dirname, 'files');
 function copyDir_and_clean(adress){
   fs.access(adress, fs.constants.F_OK, (err) => {
     if (err) {
-      copyRecursive(src, adress);
+      setTimeout(()=> {copyRecursive(src, adress);}, 500 ); 
     } else {
       fs.rm(adress, { recursive: true }, (err) => {
         if (err) {
@@ -35,14 +35,11 @@ const copyRecursive =(src, dest)=> {
       if(result.isFile()){                 
         fs.copyFile(srcs, dests, (err) => {
           if (err) throw err;  
-          console.log('Файл успешно скопирован');
         });
       }
       if(result.isDirectory()){
         copyRecursive(srcs, dests);
       }  
     });  
-  });   
-  
+  });     
 };
-exports.copyRecursive = copyRecursive;//для использования в задании № 6
