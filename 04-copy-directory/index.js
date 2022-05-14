@@ -14,14 +14,14 @@ function copyDir_and_clean(adress){
         if (err) {
           throw err; }
       });
-      setTimeout(()=> {copyRecursive(src, adress);}, 200 ); 
+      setTimeout(()=> {copyRecursive(src, adress);}, 500 ); 
     }});       
 } 
 copyDir_and_clean(adress); 
 
 
 
-function copyRecursive(src, dest) {  
+const copyRecursive =(src, dest)=> {  
   fs.mkdir(dest, { recursive: true }, (err) => {
     if (err) throw err;  
     console.log('Создана новая папка');
@@ -44,5 +44,5 @@ function copyRecursive(src, dest) {
     });  
   });   
   
-}
-module.export=copyDir_and_clean;
+};
+exports.copyRecursive = copyRecursive;//для использования в задании № 6
