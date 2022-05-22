@@ -1,63 +1,23 @@
 
+.about-container {
+  padding-top: 100px;
+  padding-bottom: 100px;
 
-footer {
-  background-color: #181617;
-}
-
-footer .container {
-  background-image: url('assets/img/footer.jpg');
-  background-size: cover;
-  box-shadow: -150px 0 150px -100px #181617 inset, 150px 0 150px -100px #181617 inset;
-}
-
-.footer-inner-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;  
-  min-height: 360px;
-}
-
-.social-list {
-  width: 240px;
-  display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+  text-align: center;
+
+  background-color: black;
+  color: whitesmoke;
 }
 
-.social-item {
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-}
-
-.social-item a {
-  display: block;
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: #f7f7f7;
-  background-size: contain;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-.fb a {
-  background-image: url('assets/svg/facebook.svg');
-}
-
-.instagramm a {
-  background-image: url('assets/svg/instagram.svg');
-  background-size: 26px;
-}
-
-.pinterest a {
-  background-image: url('assets/svg/pinterest.svg');
-}
-
-.telegram a {
-  background-image: url('assets/svg/telegram.svg');
-  background-size: 26px;
-}@font-face {
+.about-text {
+  width: 70%;
+} 
+ @font-face {
   font-family: 'Karolina';
   src: url('assets/fonts/Karolina-Regular.woff2') format('woff2');
   font-weight: normal;
@@ -238,7 +198,68 @@ header .container {
 .header-button:active {
   background-color: #8F5515;
 }
-main .container {
+ 
+ 
+
+footer {
+  background-color: #181617;
+}
+
+footer .container {
+  background-image: url('assets/img/footer.jpg');
+  background-size: cover;
+  box-shadow: -150px 0 150px -100px #181617 inset, 150px 0 150px -100px #181617 inset;
+}
+
+.footer-inner-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  
+  min-height: 360px;
+}
+
+.social-list {
+  width: 240px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.social-item {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.social-item a {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #f7f7f7;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.fb a {
+  background-image: url('assets/svg/facebook.svg');
+}
+
+.instagramm a {
+  background-image: url('assets/svg/instagram.svg');
+  background-size: 26px;
+}
+
+.pinterest a {
+  background-image: url('assets/svg/pinterest.svg');
+}
+
+.telegram a {
+  background-image: url('assets/svg/telegram.svg');
+  background-size: 26px;
+} 
+ main .container {
   padding-top: 120px;
   padding-bottom: 120px;
 }
@@ -408,4 +429,5 @@ main .container {
   background-color: #8F5515;
   border-color: #8F5515;
   outline: 0;
-}
+} 
+ 
