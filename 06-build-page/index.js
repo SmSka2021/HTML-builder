@@ -42,7 +42,7 @@ function createFolder() {
       console.log('Скопирована папка assets');
       createBundCss(srcStyles, pathBundleFileCss);
     });
-  });
+  });  
   readHtmlFile();
 }
 
@@ -76,7 +76,6 @@ function correctString(str){
   console.log(`Добавлены блоки: ${arrTags}`);
   readerComponentFolder(arrTags, arrIndx_chunk);
 }
-
 
 const readerComponentFolder =(arrTags, arrIndx_chunk)=>{ 
   let TextHTML_file= strTemplate_HTML.slice(0, arrIndx_chunk[0][0]);
